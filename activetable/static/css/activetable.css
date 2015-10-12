@@ -1,0 +1,9 @@
+/* CSS for ActiveTableXBlock */
+
+.activetable_block .count {
+    font-weight: bold;
+}
+
+.activetable_block p {
+    cursor: pointer;
+}
