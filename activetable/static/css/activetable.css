@@ -1,9 +1,82 @@
-/* CSS for ActiveTableXBlock */
-
-.activetable_block .count {
-    font-weight: bold;
+.activetable_block table {
+    clear: both;
+    padding: 0;
+    margin: 0;
+    border-collapse: collapse;
 }
-
-.activetable_block p {
+.activetable_block tr {
+    border-width: 0;
+}
+.activetable_block thead tr {
+    background: linear-gradient(#f0f0f0, #d0d0d0);
+}
+.activetable_block tr.odd {
+    background-color: #f0f0f0;
+}
+.activetable_block th, .activetable_block td {
+    line-height: 1.5em;
+    padding: 0 10px;
+    border: 1px solid #c0c0c0;
+}
+.activetable_block th {
+    text-align: left;
+    text-shadow: 0 1px 0 #ffffff;
+}
+/* cells that allow user input */
+.activetable_block td.active {
+    padding: 0;
+}
+/* Cells that haven't been checked yet */
+.activetable_block td.unchecked {
+    background-color: #ffffe0;
+}
+.activetable_block tr.odd td.unchecked {
+    background-color: #f0f0d0;
+}
+/* cells containing wrong answers after clicking "Check" */
+.activetable_block td.wrong-answer {
+    background-color: #ffe0e0;
+}
+.activetable_block tr.odd td.wrong-answer {
+    background-color: #f0d0d0;
+}
+/* cells containing right answers after clicking "Check" */
+.activetable_block td.right-answer {
+    background-color: #e0ffe0;
+}
+.activetable_block tr.odd td.right-answer {
+    background-color: #d0f0d0;
+}
+.activetable_block input[type="text"] {
+    font-size: 1em;
+    line-height: 1.5em;
+    border: 0;
+    padding: 0 10px;
+    margin: 0;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    background-color: transparent;
+}
+.activetable_block input[type="text"]:hover {
+    outline: 3px solid #a0a0ff;
+}
+.activetable_block input[type="text"]:focus {
+    outline: 3px solid #8080ff;
+}
+.activetable_block #activetable-help-text {
+    display: none;
+    padding: 5px 10px;
+    margin: 0 0 10px;
+    border: 1px solid #c0c0c0;
+    background-color: #f0f0f0;
+}
+.activetable_block #activetable-help-button {
+    float: right;
+    padding: 6px 10px 0;
+    color: #009fe6;
     cursor: pointer;
+}
+.activetable_block #activetable-help-button:hover {
+    color: #bd9730;
 }

@@ -1,0 +1,43 @@
+<div class="activetable_block">
+  {% if help_text %}
+  <div class="activetable-help" style="width: {{ total_width }}px;">
+    <a id="activetable-help-button">+help</a>
+    <p id="activetable-help-text">{{ help_text }}</p>
+  </div>
+  {% endif %}
+  {% if thead %}
+  <table id="activetable">
+    <colgroup>
+      {% for width in column_widths %}<col style="width: {{ width }}px;">{% endfor %}
+    </colgroup>
+    <thead>
+      <tr style="height: {{ head_height }}px;">
+        {% for cell in thead %}<th>{{ cell }}</th>{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in tbody %}
+      <tr style="height: {{ row.height }}px;">
+        {% for cell in row.cells %}
+        <td class="{{ cell.classes }}" id="{{ cell.id }}">
+          {% if cell.is_static %}
+          {{ cell.value }}
+          {% else %}
+          <input type="text" style="height: {{ cell.height }}px;" size=1
+                 value="{{ cell.value|default_if_none:'' }}" placeholder="{{ cell.placeholder }}">
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>This component isn't configured properly and can't be displayed.</p>
+  {% endif %}
+  <div class="status"></div>
+  <div class="status-message"></div>
+  <div class="action">
+    <button class="check Check"><span class="sr"> your answer</span><span class="check-label">Check</span></button>
+  </div>
+</div>
