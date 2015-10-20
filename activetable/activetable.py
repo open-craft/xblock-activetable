@@ -14,7 +14,7 @@ from xblockutils.studio_editable import StudioEditableXBlockMixin
 from .cells import NumericCell
 from .parsers import ParseError, parse_table, parse_number_list
 
-loader = ResourceLoader(__name__)
+loader = ResourceLoader(__name__)  # pylint: disable=invalid-name
 
 
 class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
@@ -22,7 +22,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     table_definition = String(
         display_name='Table definition',
-        help='The definition of the table in Python-like syntax.',  # TODO(smarnach): proper help
+        help='The definition of the table in Python-like syntax.',
         scope=Scope.content,
         multiline_editor=True,
         resettable_editor=False,
@@ -82,6 +82,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         self._column_widths = None
         self._row_heights = None
         self.response_cells = None
+        self.parse_fields()
+        self.postprocess_table()
 
     def parse_fields(self):
         """Parse the user-provided fields into more processing-friendly structured data."""
@@ -98,6 +100,12 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             self._row_heights = parse_number_list(self.row_heights)
         else:
             self._row_heights = [36] * (len(self.tbody) + 1)
+
+    def postprocess_table(self):
+        """Augment the parsed table definition with further information.
+
+        The additional information is taken from other content and student state fields.
+        """
         self.response_cells = {}
         for row, height in zip(self.tbody, self._row_heights[1:]):
             row['height'] = height
@@ -122,7 +130,6 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     def student_view(self, context=None):
         """Render the table."""
-        self.parse_fields()
         context = dict(
             help_text=self.help_text,
             total_width=sum(self._column_widths) if self._column_widths else None,
@@ -143,12 +150,11 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         return frag
 
     @XBlock.json_handler
-    def check_answers(self, data, suffix=''):
+    def check_answers(self, data, unused_suffix=''):
         """Check the answers given by the student.
 
         This handler is called when the "Check" button is clicked.
         """
-        self.parse_fields()
         correct_dict = {
             cell_id: self.response_cells[cell_id].check_response(value)
             for cell_id, value in data.iteritems()
@@ -166,6 +172,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         properties of this XBlock.
         """
         def add_error(msg):
+            """Add a validation error."""
             validation.add(ValidationMessage(ValidationMessage.ERROR, msg))
         try:
             parse_table(data.table_definition)

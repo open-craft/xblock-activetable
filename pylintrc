@@ -1,0 +1,14 @@
+[REPORTS]
+reports=no
+
+[FORMAT]
+max-line-length=100
+
+[MESSAGES CONTROL]
+disable=
+    I,
+    too-few-public-methods,
+    too-many-ancestors
+
+[VARIABLES]
+dummy-variables-rgx=_$|dummy|unused

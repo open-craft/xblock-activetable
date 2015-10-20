@@ -7,6 +7,8 @@ classes themselves.
 """
 from __future__ import absolute_import, division, unicode_literals
 
+import decimal
+
 
 class StaticCell(object):
     """A static cell with a fixed value in the table body."""
@@ -23,32 +25,34 @@ class NumericCell(object):
     is_static = False
     placeholder = 'numeric response'
 
-    def __init__(self, answer, tolerance=None, min_significant_digits=None, max_significant_digits=None):
+    def __init__(
+            self, answer, tolerance=None, min_significant_digits=None, max_significant_digits=None
+        ):
         """Set the correct answer and the allowed relative tolerance in percent."""
         self.answer = answer
+        self.abs_tolerance = None
         self.set_tolerance(tolerance)
         self.min_significant_digits = min_significant_digits
         self.max_significant_digits = max_significant_digits
 
     def set_tolerance(self, tolerance):
-        if tolerance is None:
-            self.abs_tolerance = None
-        else:
+        """Set the tolerance to the specified value, if it is not None."""
+        if tolerance is not None:
             self.abs_tolerance = abs(self.answer) * tolerance / 100.0
 
     def check_response(self, student_response):
         """Return a Boolean value indicating whether the student response is correct."""
         try:
-            r = float(student_response)
+            value = float(student_response)
         except ValueError:
             return False
         if self.min_significant_digits or self.max_significant_digits:
-            d = len(decimal.Decimal(student_response).as_tuple().digits)
-            if self.min_significant_digits and d < self.min_significant_digits:
+            digits = len(decimal.Decimal(student_response).as_tuple().digits)  # pylint: disable=no-member
+            if self.min_significant_digits and digits < self.min_significant_digits:
                 return False
-            if self.max_significant_digits and d > self.max_significant_digits:
+            if self.max_significant_digits and digits > self.max_significant_digits:
                 return False
-        return abs(r - self.answer) <= self.abs_tolerance
+        return abs(value - self.answer) <= self.abs_tolerance
 
 
 class StringCell(object):
