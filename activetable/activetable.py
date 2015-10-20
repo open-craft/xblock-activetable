@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 import textwrap
 
 from xblock.core import XBlock
-from xblock.fields import Dict, Float, Scope, String
+from xblock.fields import Dict, Float, Integer, Scope, String
 from xblock.fragment import Fragment
 from xblock.validation import ValidationMessage
 from xblockutils.resources import ResourceLoader
@@ -69,7 +69,10 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'table_definition', 'help_text', 'column_widths', 'row_heights', 'default_tolerance'
     ]
 
+    # Dictionary mapping cell ids to the student answers.
     answers = Dict(scope=Scope.user_state)
+    # Number of correct answers.
+    num_correct_answers = Integer(scope=Scope.user_state)
 
     def __init__(self, *args, **kwargs):
         super(ActiveTableXBlock, self).__init__(*args, **kwargs)
@@ -132,7 +135,10 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         frag = Fragment(html)
         frag.add_css(loader.load_unicode('static/css/activetable.css'))
         frag.add_javascript(loader.load_unicode('static/js/src/activetable.js'))
-        frag.initialize_js('ActiveTableXBlock')
+        frag.initialize_js('ActiveTableXBlock', dict(
+            num_correct_answers=self.num_correct_answers,
+            num_total_answers=len(self.answers) if self.answers is not None else None,
+        ))
         return frag
 
     @XBlock.json_handler
@@ -149,9 +155,15 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         # Since the previous statement executed without error, the data is well-formed enough to be
         # stored.  We now know it's a dictionary and all the keys are valid cell ids.
         self.answers = data
+        self.num_correct_answers = sum(correct_dict.itervalues())
         return correct_dict
 
     def validate_field_data(self, validation, data):
+        """Validate the data entered by the user.
+
+        This handler is called when the "Save" button is clicked in Studio after editing the
+        properties of this XBlock.
+        """
         def add_error(msg):
             validation.add(ValidationMessage(ValidationMessage.ERROR, msg))
         try:

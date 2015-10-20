@@ -1,15 +1,30 @@
 /* Javascript for ActiveTableXBlock. */
-function ActiveTableXBlock(runtime, element) {
+function ActiveTableXBlock(runtime, element, init_args) {
 
     var checkHandlerUrl = runtime.handlerUrl(element, 'check_answers');
 
+    function updateStatusMessage(num_total, num_correct) {
+        var $status_message = $('.status-message', element);
+        if (num_total == num_correct) {
+            $status_message.text('Great job!');
+        } else {
+            $status_message.text(
+                'You have ' + num_correct + ' out of ' + num_total + ' cells correct.'
+            );
+        }
+    }
+
     function markResponseCells(correct_dict) {
+        var num_total = 0, num_correct = 0;
         $.each(correct_dict, function(cell_id, correct) {
             var $cell = $('#' + cell_id, element);
             $cell.removeClass('right-answer wrong-answer unchecked');
             if (correct) $cell.addClass('right-answer')
             else $cell.addClass('wrong-answer');
-        })
+            num_total += 1;
+            num_correct += correct;
+        });
+        updateStatusMessage(num_total, num_correct);
     }
 
     function checkAnswers(e) {
@@ -33,4 +48,7 @@ function ActiveTableXBlock(runtime, element) {
 
     $('#activetable-help-button', element).click(toggleHelp);
     $('.action .check', element).click(checkAnswers);
+    if (init_args.num_total_answers) {
+        updateStatusMessage(init_args.num_total_answers, init_args.num_correct_answers);
+    }
 }
