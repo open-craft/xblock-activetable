@@ -1,3 +1,4 @@
 __pycache__/
 *.py[cod]
 activetable_xblock.egg-info/**
+.coverage

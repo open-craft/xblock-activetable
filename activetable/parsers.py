@@ -90,7 +90,10 @@ def parse_number_list(source):
 
     This is used to parse the column_widths and row_heights lists entered by the user.
     """
-    lst = ast.literal_eval(source)
+    try:
+        lst = ast.literal_eval(source)
+    except SyntaxError as exc:
+        raise ParseError(exc.msg)
     if not isinstance(lst, list):
         raise ParseError('not a list')
     if not all(isinstance(x, numbers.Real) for x in lst):

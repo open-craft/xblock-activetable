@@ -10,7 +10,15 @@ from __future__ import absolute_import, division, unicode_literals
 import decimal
 
 
-class StaticCell(object):
+class Cell(object):
+    """Abstract base class for all cells."""
+
+    def __eq__(self, other):
+        """Test for equality based on type and attribute values."""
+        return type(self) is type(other) and vars(self) == vars(other)
+
+
+class StaticCell(Cell):
     """A static cell with a fixed value in the table body."""
 
     is_static = True
@@ -19,7 +27,7 @@ class StaticCell(object):
         self.value = value
 
 
-class NumericCell(object):
+class NumericCell(Cell):
     """A numeric response cell."""
 
     is_static = False
@@ -55,7 +63,7 @@ class NumericCell(object):
         return abs(value - self.answer) <= self.abs_tolerance
 
 
-class StringCell(object):
+class StringCell(Cell):
     """A string response cell."""
 
     is_static = False

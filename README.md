@@ -5,6 +5,22 @@ This XBlock provides a tabular problem type, where students have to fill in some
 table.
 
 
+Running the tests
+-----------------
+
+Install the test prerequisites:
+
+    pip install -r test-requirements
+
+Run pylint:
+
+    pylint activetable
+
+Run the unit tests:
+
+    nosetests --with-coverage --cover-package=activetable tests/unit
+
+
 The table definition
 --------------------
 
