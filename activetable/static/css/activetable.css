@@ -85,14 +85,21 @@
 .activetable_block #activetable-help-button:hover {
     color: #bd9730;
 }
-.activetable_block .status, .activetable_block .status-message {
-    margin: 2em 0;
-}
 .activetable_block .status {
+    margin: 1.5em 0 0.5em;
     display: inline-block;
     width: 20px;
     height: 20px;
     background: url("/static/images/unanswered-icon.png") center no-repeat;
+}
+.activetable_block .status.correct {
+    background-image: url("/static/images/correct-icon.png");
+}
+.activetable_block .status.incorrect {
+    background-image: url("/static/images/incorrect-icon.png");
+}
+.activetable_block .status-message {
+    margin: 0.5em 0 1.5em;
 }
 .activetable_block .action .check {
     height: 40px;

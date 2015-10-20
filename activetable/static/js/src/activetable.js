@@ -3,11 +3,14 @@ function ActiveTableXBlock(runtime, element, init_args) {
 
     var checkHandlerUrl = runtime.handlerUrl(element, 'check_answers');
 
-    function updateStatusMessage(num_total, num_correct) {
+    function updateStatus(num_total, num_correct) {
+        var $status = $('.status', element);
         var $status_message = $('.status-message', element);
         if (num_total == num_correct) {
+            $status.removeClass('incorrect').addClass('correct');
             $status_message.text('Great job!');
         } else {
+            $status.removeClass('correct').addClass('incorrect');
             $status_message.text(
                 'You have ' + num_correct + ' out of ' + num_total + ' cells correct.'
             );
@@ -24,7 +27,7 @@ function ActiveTableXBlock(runtime, element, init_args) {
             num_total += 1;
             num_correct += correct;
         });
-        updateStatusMessage(num_total, num_correct);
+        updateStatus(num_total, num_correct);
     }
 
     function checkAnswers(e) {
@@ -49,6 +52,6 @@ function ActiveTableXBlock(runtime, element, init_args) {
     $('#activetable-help-button', element).click(toggleHelp);
     $('.action .check', element).click(checkAnswers);
     if (init_args.num_total_answers) {
-        updateStatusMessage(init_args.num_total_answers, init_args.num_correct_answers);
+        updateStatus(init_args.num_total_answers, init_args.num_correct_answers);
     }
 }
