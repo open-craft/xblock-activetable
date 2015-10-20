@@ -1,7 +1,7 @@
 <div class="activetable_block">
   {% if help_text %}
   <div class="activetable-help" style="width: {{ total_width }}px;">
-    <a id="activetable-help-button">+help</a>
+    <button id="activetable-help-button">+help</button>
     <p id="activetable-help-text">{{ help_text }}</p>
   </div>
   {% endif %}
@@ -35,7 +35,7 @@
   {% else %}
   <p>This component isn't configured properly and can't be displayed.</p>
   {% endif %}
-  <div class="status"></div>
+  <p class="status">unanswered</p>
   <div class="status-message"></div>
   <div class="action">
     <button class="check"><span class="check-label">Check</span><span class="sr"> your answer</span></button>

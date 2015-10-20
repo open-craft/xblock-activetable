@@ -8,9 +8,11 @@ function ActiveTableXBlock(runtime, element, init_args) {
         var $status_message = $('.status-message', element);
         if (num_total == num_correct) {
             $status.removeClass('incorrect').addClass('correct');
+            $status.text('correct');
             $status_message.text('Great job!');
         } else {
             $status.removeClass('correct').addClass('incorrect');
+            $status.text('incorrect');
             $status_message.text(
                 'You have ' + num_correct + ' out of ' + num_total + ' cells correct.'
             );
@@ -22,8 +24,13 @@ function ActiveTableXBlock(runtime, element, init_args) {
         $.each(correct_dict, function(cell_id, correct) {
             var $cell = $('#' + cell_id, element);
             $cell.removeClass('right-answer wrong-answer unchecked');
-            if (correct) $cell.addClass('right-answer')
-            else $cell.addClass('wrong-answer');
+            if (correct) {
+                $cell.addClass('right-answer');
+                $cell.prop('title', 'correct');
+            } else {
+                $cell.addClass('wrong-answer');
+                $cell.prop('title', 'incorrect');
+            }
             num_total += 1;
             num_correct += correct;
         });
