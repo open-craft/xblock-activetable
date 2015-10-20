@@ -17,10 +17,12 @@
     line-height: 1.5em;
     padding: 0 10px;
     border: 1px solid #c0c0c0;
+    vertical-align: middle;
 }
 .activetable_block th {
     text-align: left;
     text-shadow: 0 1px 0 #ffffff;
+    font-weight: bold;
 }
 /* cells that allow user input */
 .activetable_block td.active {
@@ -57,6 +59,9 @@
     display: block;
     width: 100%;
     background-color: transparent;
+    border-radius: initial;
+    background-image: initial;
+    box-shadow: initial;
 }
 .activetable_block input[type="text"]:hover {
     outline: 3px solid #a0a0ff;
@@ -79,4 +84,18 @@
 }
 .activetable_block #activetable-help-button:hover {
     color: #bd9730;
+}
+.activetable_block .status, .activetable_block .status-message {
+    margin: 2em 0;
+}
+.activetable_block .status {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url("/static/images/unanswered-icon.png") center no-repeat;
+}
+.activetable_block .action .check {
+    height: 40px;
+    font-weight: 600;
+    text-transform: uppercase;
 }

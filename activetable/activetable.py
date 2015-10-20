@@ -97,11 +97,16 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         self.response_cells = {}
         for row, height in zip(self.tbody, self._row_heights[1:]):
             row['height'] = height
+            if row['index'] & 1:
+                row['class'] = 'even'
+            else:
+                row['class'] = 'odd'
             for cell in row['cells']:
                 cell.id = 'cell_{}_{}'.format(cell.index, row['index'])
                 if not cell.is_static:
                     self.response_cells[cell.id] = cell
                     cell.value = self.answers.get(cell.id)
+                    cell.height = height - 2
                     if isinstance(cell, NumericCell) and cell.abs_tolerance is None:
                         cell.set_tolerance(self.default_tolerance)
                     if cell.value is None:

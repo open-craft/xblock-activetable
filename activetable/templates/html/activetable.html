@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       {% for row in tbody %}
-      <tr style="height: {{ row.height }}px;">
+      <tr class="{{ row.class }}" style="height: {{ row.height }}px;">
         {% for cell in row.cells %}
         <td class="{{ cell.classes }}" id="{{ cell.id }}">
           {% if cell.is_static %}
@@ -38,6 +38,6 @@
   <div class="status"></div>
   <div class="status-message"></div>
   <div class="action">
-    <button class="check Check"><span class="sr"> your answer</span><span class="check-label">Check</span></button>
+    <button class="check"><span class="check-label">Check</span><span class="sr"> your answer</span></button>
   </div>
 </div>
