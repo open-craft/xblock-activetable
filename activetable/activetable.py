@@ -36,12 +36,13 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
     )
     help_text = String(
         display_name='Help text',
-        help='The text that gets displayed when clicking the "+help" button.  If you do not '
-        'specify a text, the help feature is disabled.',
+        help='The text that gets displayed when clicking the "+help" button.  If you remove the '
+        'help text, the help feature is disabled.',
         scope=Scope.content,
         multiline_editor=True,
         resettable_editor=False,
-        default='',
+        default='Fill in the cells highlighted in yellow with the correct answers.  '
+        'When you are done, you can check your answers using the button below the table.',
     )
     column_widths = String(
         display_name='Column widths',
