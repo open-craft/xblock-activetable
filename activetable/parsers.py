@@ -92,8 +92,9 @@ def parse_number_list(source):
     """
     try:
         lst = ast.literal_eval(source)
-    except SyntaxError as exc:
-        raise ParseError(exc.msg)
+    except (SyntaxError, ValueError) as exc:
+        msg = getattr(exc, 'msg', getattr(exc, 'message', None))
+        raise ParseError(msg)
     if not isinstance(lst, list):
         raise ParseError('not a list')
     if not all(isinstance(x, numbers.Real) for x in lst):

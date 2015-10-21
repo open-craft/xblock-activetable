@@ -52,6 +52,6 @@ class ParserTest(unittest.TestCase):
 
     def test_parse_number_list(self):
         self.assertEquals(parse_number_list('[1, 2.3]'), [1, 2.3])
-        for string in [']', '123', '["123"]', '[1j]']:
+        for string in [']', '123', '["123"]', '[1j]', 'malformed']:
             with self.assertRaises(ParseError):
                 parse_number_list(string)
