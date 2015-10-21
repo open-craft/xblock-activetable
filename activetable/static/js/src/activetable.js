@@ -3,25 +3,25 @@ function ActiveTableXBlock(runtime, element, init_args) {
 
     var checkHandlerUrl = runtime.handlerUrl(element, 'check_answers');
 
-    function updateStatus(num_total, num_correct) {
+    function updateStatus(data) {
         var $status = $('.status', element);
         var $status_message = $('.status-message', element);
-        if (num_total == num_correct) {
+        if (data.num_total_answers == data.num_correct_answers) {
             $status.removeClass('incorrect').addClass('correct');
             $status.text('correct');
-            $status_message.text('Great job!');
+            $status_message.text('Great job! (' + data.score + '/' + data.max_score + ' points)');
         } else {
             $status.removeClass('correct').addClass('incorrect');
             $status.text('incorrect');
             $status_message.text(
-                'You have ' + num_correct + ' out of ' + num_total + ' cells correct.'
+                'You have ' + data.num_correct_answers + ' out of ' + data.num_total_answers +
+                ' cells correct. (' + data.score + '/' + data.max_score + ' points)'
             );
         }
     }
 
-    function markResponseCells(correct_dict) {
-        var num_total = 0, num_correct = 0;
-        $.each(correct_dict, function(cell_id, correct) {
+    function markResponseCells(data) {
+        $.each(data.correct, function(cell_id, correct) {
             var $cell = $('#' + cell_id, element);
             $cell.removeClass('right-answer wrong-answer unchecked');
             if (correct) {
@@ -31,10 +31,8 @@ function ActiveTableXBlock(runtime, element, init_args) {
                 $cell.addClass('wrong-answer');
                 $cell.prop('title', 'incorrect');
             }
-            num_total += 1;
-            num_correct += correct;
         });
-        updateStatus(num_total, num_correct);
+        updateStatus(data);
     }
 
     function checkAnswers(e) {
@@ -58,7 +56,5 @@ function ActiveTableXBlock(runtime, element, init_args) {
 
     $('#activetable-help-button', element).click(toggleHelp);
     $('.action .check', element).click(checkAnswers);
-    if (init_args.num_total_answers) {
-        updateStatus(init_args.num_total_answers, init_args.num_correct_answers);
-    }
+    if (init_args.num_total_answers) updateStatus(init_args);
 }

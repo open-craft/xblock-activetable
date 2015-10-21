@@ -71,15 +71,32 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.content,
         default=1.0,
     )
+    max_score = Float(
+        display_name='Maximum score',
+        help='The number of points students will be awarded when solving all fields correctly.  '
+        'For partially correct attempts, the score will be pro-rated.',
+        scope=Scope.settings,
+        default=1.0,
+    )
 
     editable_fields = [
-        'table_definition', 'help_text', 'column_widths', 'row_heights', 'default_tolerance'
+        'display_name',
+        'table_definition',
+        'help_text',
+        'column_widths',
+        'row_heights',
+        'default_tolerance',
+        'max_score',
     ]
 
     # Dictionary mapping cell ids to the student answers.
     answers = Dict(scope=Scope.user_state)
     # Number of correct answers.
     num_correct_answers = Integer(scope=Scope.user_state)
+    # The number of points awarded.
+    score = Float(scope=Scope.user_state)
+
+    has_score = True
 
     def __init__(self, *args, **kwargs):
         super(ActiveTableXBlock, self).__init__(*args, **kwargs)
@@ -152,6 +169,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         frag.initialize_js('ActiveTableXBlock', dict(
             num_correct_answers=self.num_correct_answers,
             num_total_answers=len(self.answers) if self.answers is not None else None,
+            score=self.score,
+            max_score=self.max_score,
         ))
         return frag
 
@@ -161,15 +180,23 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
         This handler is called when the "Check" button is clicked.
         """
-        correct_dict = {
+        correct = {
             cell_id: self.response_cells[cell_id].check_response(value)
             for cell_id, value in data.iteritems()
         }
         # Since the previous statement executed without error, the data is well-formed enough to be
         # stored.  We now know it's a dictionary and all the keys are valid cell ids.
         self.answers = data
-        self.num_correct_answers = sum(correct_dict.itervalues())
-        return correct_dict
+        self.num_correct_answers = sum(correct.itervalues())
+        self.score = self.num_correct_answers * self.max_score / len(correct)
+        self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.max_score))
+        return dict(
+            correct=correct,
+            num_correct_answers=self.num_correct_answers,
+            num_total_answers=len(correct),
+            score=self.score,
+            max_score=self.max_score,
+        )
 
     def validate_field_data(self, validation, data):
         """Validate the data entered by the user.
