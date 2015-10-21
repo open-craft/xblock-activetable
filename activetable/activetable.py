@@ -20,6 +20,12 @@ loader = ResourceLoader(__name__)  # pylint: disable=invalid-name
 class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
     """An XBlock with a tabular problem type that requires students to fill in some cells."""
 
+    display_name = String(
+        display_name='Display Name',
+        help='The title Studio uses for the component.',
+        scope=Scope.settings,
+        default='ActiveTable problem'
+    )
     table_definition = String(
         display_name='Table definition',
         help='The definition of the table in Python-like syntax.',
