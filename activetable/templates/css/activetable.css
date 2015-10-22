@@ -99,13 +99,13 @@
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
-    background: url("/static/images/unanswered-icon.png") center no-repeat;
+    background: url("{{ unanswered_icon }}") center no-repeat;
 }
 .activetable_block .status.correct {
-    background-image: url("/static/images/correct-icon.png");
+    background-image: url("{{ correct_icon }}");
 }
 .activetable_block .status.incorrect {
-    background-image: url("/static/images/incorrect-icon.png");
+    background-image: url("{{ incorrect_icon }}");
 }
 .activetable_block .status-message {
     margin: 0.5em 0 1.5em;

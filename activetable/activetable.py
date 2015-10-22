@@ -163,8 +163,15 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         )
         html = loader.render_template('templates/html/activetable.html', context)
 
+        css_context = dict(
+            correct_icon=self.runtime.local_resource_url(self, 'public/img/correct-icon.png'),
+            incorrect_icon=self.runtime.local_resource_url(self, 'public/img/incorrect-icon.png'),
+            unanswered_icon=self.runtime.local_resource_url(self, 'public/img/unanswered-icon.png'),
+        )
+        css = loader.render_template('templates/css/activetable.css', css_context)
+
         frag = Fragment(html)
-        frag.add_css(loader.load_unicode('static/css/activetable.css'))
+        frag.add_css(css)
         frag.add_javascript(loader.load_unicode('static/js/src/activetable.js'))
         frag.initialize_js('ActiveTableXBlock', dict(
             num_correct_answers=self.num_correct_answers,
