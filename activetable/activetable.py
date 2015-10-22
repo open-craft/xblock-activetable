@@ -98,16 +98,6 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     has_score = True
 
-    def __init__(self, *args, **kwargs):
-        super(ActiveTableXBlock, self).__init__(*args, **kwargs)
-        self.thead = None
-        self.tbody = None
-        self._column_widths = None
-        self._row_heights = None
-        self.response_cells = None
-        self.parse_fields()
-        self.postprocess_table()
-
     def parse_fields(self):
         """Parse the user-provided fields into more processing-friendly structured data."""
         if self.table_definition:
@@ -153,6 +143,9 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     def student_view(self, context=None):
         """Render the table."""
+        self.parse_fields()
+        self.postprocess_table()
+
         context = dict(
             help_text=self.help_text,
             total_width=sum(self._column_widths) if self._column_widths else None,
@@ -187,6 +180,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
         This handler is called when the "Check" button is clicked.
         """
+        self.parse_fields()
+        self.postprocess_table()
         correct = {
             cell_id: self.response_cells[cell_id].check_response(value)
             for cell_id, value in data.iteritems()

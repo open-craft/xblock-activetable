@@ -7,8 +7,10 @@ max-line-length=100
 [MESSAGES CONTROL]
 disable=
     I,
+    attribute-defined-outside-init,
     too-few-public-methods,
-    too-many-ancestors
+    too-many-ancestors,
+    too-many-instance-attributes
 
 [VARIABLES]
 dummy-variables-rgx=_$|dummy|unused
