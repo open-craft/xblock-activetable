@@ -33,9 +33,8 @@ class NumericCell(Cell):
     is_static = False
     placeholder = 'numeric response'
 
-    def __init__(
-            self, answer, tolerance=None, min_significant_digits=None, max_significant_digits=None
-        ):
+    def __init__(self, answer, tolerance=None,
+                 min_significant_digits=None, max_significant_digits=None):
         """Set the correct answer and the allowed relative tolerance in percent."""
         self.answer = answer
         self.abs_tolerance = None
@@ -55,7 +54,9 @@ class NumericCell(Cell):
         except ValueError:
             return False
         if self.min_significant_digits or self.max_significant_digits:
-            digits = len(decimal.Decimal(student_response).as_tuple().digits)  # pylint: disable=no-member
+            # pylint: disable=no-member
+            digits = len(decimal.Decimal(student_response).as_tuple().digits)
+            # pylint: enable=no-member
             if self.min_significant_digits and digits < self.min_significant_digits:
                 return False
             if self.max_significant_digits and digits > self.max_significant_digits:

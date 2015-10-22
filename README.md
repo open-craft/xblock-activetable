@@ -12,6 +12,10 @@ Install the test prerequisites:
 
     pip install -r test-requirements
 
+Run pep8:
+
+    pep8 --max-line-length=100 activetable
+
 Run pylint:
 
     pylint activetable
