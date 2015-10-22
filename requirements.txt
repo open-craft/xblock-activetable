@@ -1,0 +1,3 @@
+-e git+https://github.com/edx/XBlock.git@tag-master-2015-05-22#egg=XBlock
+-e git+https://github.com/edx/xblock-utils.git@b4f9b51146c7fafa12f41d54af752b8f1516dffd#egg=xblock-utils
+-e .

@@ -1,0 +1,11 @@
+language: python
+python:
+  - 2.7
+install:
+  - pip install -r test-requirements.txt
+script:
+  - pep8 --max-line-length=100 activetable
+  - pylint activetable
+  - nosetests --with-coverage --cover-package=activetable tests/unit
+notifications:
+  email: false
