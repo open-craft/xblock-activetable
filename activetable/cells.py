@@ -54,9 +54,7 @@ class NumericCell(Cell):
         except ValueError:
             return False
         if self.min_significant_digits or self.max_significant_digits:
-            # pylint: disable=no-member
             digits = len(decimal.Decimal(student_response).as_tuple().digits)
-            # pylint: enable=no-member
             if self.min_significant_digits and digits < self.min_significant_digits:
                 return False
             if self.max_significant_digits and digits > self.max_significant_digits:
