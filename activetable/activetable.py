@@ -78,6 +78,12 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.settings,
         default=1.0,
     )
+    max_attempts = Integer(
+        display_name='Maximum attempts',
+        help='Defines the number of times a student can try to answer this problem.  If the value '
+        'is not set, infinite attempts are allowed.',
+        scope=Scope.settings,
+    )
 
     editable_fields = [
         'display_name',
@@ -87,16 +93,34 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'row_heights',
         'default_tolerance',
         'max_score',
+        'max_attempts',
     ]
 
     # Dictionary mapping cell ids to the student answers.
     answers = Dict(scope=Scope.user_state)
-    # Number of correct answers.
-    num_correct_answers = Integer(scope=Scope.user_state)
+    # Dictionary mapping cell ids to Boolean values indicating whether the cell was answered
+    # correctly at the last check.
+    answers_correct = Dict(scope=Scope.user_state, default=None)
     # The number of points awarded.
     score = Float(scope=Scope.user_state)
+    # The number of attempts used.
+    attempts = Integer(scope=Scope.user_state, default=0)
 
     has_score = True
+
+    @property
+    def num_correct_answers(self):
+        """The number of correct answers during the last check."""
+        if self.answers_correct is None:
+            return None
+        return sum(self.answers_correct.itervalues())
+
+    @property
+    def num_total_answers(self):
+        """The total number of answers during the last check."""
+        if self.answers_correct is None:
+            return None
+        return len(self.answers_correct)
 
     def parse_fields(self):
         """Parse the user-provided fields into more processing-friendly structured data."""
@@ -130,16 +154,23 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
                 cell.id = 'cell_{}_{}'.format(cell.index, row['index'])
                 if not cell.is_static:
                     self.response_cells[cell.id] = cell
+                    cell.classes = 'active'
                     cell.value = self.answers.get(cell.id)
                     cell.height = height - 2
                     if isinstance(cell, NumericCell) and cell.abs_tolerance is None:
                         cell.set_tolerance(self.default_tolerance)
-                    if cell.value is None:
-                        cell.classes = 'active unchecked'
-                    elif cell.check_response(cell.value):
-                        cell.classes = 'active right-answer'
-                    else:
-                        cell.classes = 'active wrong-answer'
+
+    def get_status(self):
+        """Status dictionary passed to the frontend code."""
+        return dict(
+            answers_correct=self.answers_correct,
+            num_correct_answers=self.num_correct_answers,
+            num_total_answers=self.num_total_answers,
+            score=self.score,
+            max_score=self.max_score,
+            attempts=self.attempts,
+            max_attempts=self.max_attempts,
+        )
 
     def student_view(self, context=None):
         """Render the table."""
@@ -153,6 +184,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             head_height=self._row_heights[0] if self._row_heights else None,
             thead=self.thead,
             tbody=self.tbody,
+            max_attempts=self.max_attempts,
         )
         html = loader.render_template('templates/html/activetable.html', context)
 
@@ -166,13 +198,26 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         frag = Fragment(html)
         frag.add_css(css)
         frag.add_javascript(loader.load_unicode('static/js/src/activetable.js'))
-        frag.initialize_js('ActiveTableXBlock', dict(
-            num_correct_answers=self.num_correct_answers,
-            num_total_answers=len(self.answers) if self.answers is not None else None,
-            score=self.score,
-            max_score=self.max_score,
-        ))
+        frag.initialize_js('ActiveTableXBlock', self.get_status())
         return frag
+
+    def check_and_save_answers(self, data):
+        """Common implementation for the check and save handlers."""
+        if self.max_attempts and self.attempts >= self.max_attempts:
+            # The "Check" button is hidden when the maximum number of attempts has been reached, so
+            # we can only get here by manually crafted requests.  We simply return the current
+            # status without rechecking or storing the answers in that case.
+            return self.get_status()
+        self.parse_fields()
+        self.postprocess_table()
+        answers_correct = {
+            cell_id: self.response_cells[cell_id].check_response(value)
+            for cell_id, value in data.iteritems()
+        }
+        # Since the previous statement executed without error, the data is well-formed enough to be
+        # stored.  We now know it's a dictionary and all the keys are valid cell ids.
+        self.answers = data
+        return answers_correct
 
     @XBlock.json_handler
     def check_answers(self, data, unused_suffix=''):
@@ -180,25 +225,18 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
         This handler is called when the "Check" button is clicked.
         """
-        self.parse_fields()
-        self.postprocess_table()
-        correct = {
-            cell_id: self.response_cells[cell_id].check_response(value)
-            for cell_id, value in data.iteritems()
-        }
-        # Since the previous statement executed without error, the data is well-formed enough to be
-        # stored.  We now know it's a dictionary and all the keys are valid cell ids.
-        self.answers = data
-        self.num_correct_answers = sum(correct.itervalues())
-        self.score = self.num_correct_answers * self.max_score / len(correct)
+        self.answers_correct = self.check_and_save_answers(data)
+        self.attempts += 1
+        self.score = self.num_correct_answers * self.max_score / len(self.answers_correct)
         self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.max_score))
-        return dict(
-            correct=correct,
-            num_correct_answers=self.num_correct_answers,
-            num_total_answers=len(correct),
-            score=self.score,
-            max_score=self.max_score,
-        )
+        return self.get_status()
+
+    @XBlock.json_handler
+    def save_answers(self, data, unused_suffix=''):
+        """Save the answers given by the student without checking them."""
+        self.check_and_save_answers(data)
+        self.answers_correct = None
+        return self.get_status()
 
     def validate_field_data(self, validation, data):
         """Validate the data entered by the user.

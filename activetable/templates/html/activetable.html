@@ -35,9 +35,13 @@
   {% else %}
   <p>This component isn't configured properly and can't be displayed.</p>
   {% endif %}
-  <p class="status">unanswered</p>
+  <p class="status"></p>
   <div class="status-message"></div>
   <div class="action">
     <button class="check"><span class="check-label">Check</span><span class="sr"> your answer</span></button>
+    {% if max_attempts %}
+    <button class="save">Save<span class="sr"> your answer</span></button>
+    <div class="submission-feedback"></div>
+    {% endif %}
   </div>
 </div>

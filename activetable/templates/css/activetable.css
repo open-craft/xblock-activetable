@@ -110,8 +110,14 @@
 .activetable_block .status-message {
     margin: 0.5em 0 1.5em;
 }
-.activetable_block .action .check {
+.activetable_block .action button {
     height: 40px;
+    margin-right: 10px;
     font-weight: 600;
     text-transform: uppercase;
+}
+.activetable_block .submission-feedback {
+    display: inline-block;
+    font-style: italic;
+    margin-left: 10px;
 }
