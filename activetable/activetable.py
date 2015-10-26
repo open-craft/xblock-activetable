@@ -248,16 +248,29 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             """Add a validation error."""
             validation.add(ValidationMessage(ValidationMessage.ERROR, msg))
         try:
-            parse_table(data.table_definition)
+            thead, tbody = parse_table(data.table_definition)
         except ParseError as exc:
             add_error('Problem with table definition: ' + exc.message)
+            thead = tbody = None
         if data.column_widths:
             try:
-                parse_number_list(data.column_widths)
+                column_widths = parse_number_list(data.column_widths)
             except ParseError as exc:
                 add_error('Problem with column widths: ' + exc.message)
+            else:
+                if thead is not None and len(column_widths) != len(thead):
+                    add_error(
+                        'The number of list entries in the Column widths field must match the '
+                        'number of columns in the table.'
+                    )
         if data.row_heights:
             try:
-                parse_number_list(data.row_heights)
+                row_heights = parse_number_list(data.row_heights)
             except ParseError as exc:
                 add_error('Problem with row heights: ' + exc.message)
+            else:
+                if tbody is not None and len(row_heights) != len(tbody) + 1:
+                    add_error(
+                        'The number of list entries in the Row heights field must match the number '
+                        'of rows in the table.'
+                    )
