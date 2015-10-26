@@ -26,7 +26,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.settings,
         default='ActiveTable problem'
     )
-    table_definition = String(
+    content = String(
         display_name='Table definition',
         help='The definition of the table in Python-like syntax.',
         scope=Scope.content,
@@ -89,7 +89,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     editable_fields = [
         'display_name',
-        'table_definition',
+        'content',
         'help_text',
         'column_widths',
         'row_heights',
@@ -126,8 +126,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     def parse_fields(self):
         """Parse the user-provided fields into more processing-friendly structured data."""
-        if self.table_definition:
-            self.thead, self.tbody = parse_table(self.table_definition)
+        if self.content:
+            self.thead, self.tbody = parse_table(self.content)
         else:
             self.thead = self.tbody = None
             return
@@ -250,7 +250,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             """Add a validation error."""
             validation.add(ValidationMessage(ValidationMessage.ERROR, msg))
         try:
-            thead, tbody = parse_table(data.table_definition)
+            thead, tbody = parse_table(data.content)
         except ParseError as exc:
             add_error('Problem with table definition: ' + exc.message)
             thead = tbody = None
