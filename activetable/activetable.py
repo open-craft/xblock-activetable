@@ -56,6 +56,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'numerical values.  The total width of the table should not be more than 800. No value '
         'will result in equal-width columns with a total width of 800 pixels.',
         scope=Scope.content,
+        resettable_editor=False,
     )
     row_heights = String(
         display_name='Row heights',
@@ -63,6 +64,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'numerical values. Rows may grow higher than the specified value if the text in some cells '
         'in the row is long enough to get wrapped in more than one line.',
         scope=Scope.content,
+        resettable_editor=False,
     )
     default_tolerance = Float(
         display_name='Default tolerance',
