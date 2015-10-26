@@ -276,3 +276,21 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
                         'The number of list entries in the Row heights field must match the number '
                         'of rows in the table.'
                     )
+
+    @staticmethod
+    def workbench_scenarios():
+        """A canned scenario for display in the workbench."""
+        return [
+            ("ActiveTableXBlock",
+             """<vertical_demo>
+                  <activetable url_name="basic">
+                    [
+                      ['Event', 'Year'],
+                      ['French Revolution', Numeric(answer=1789)],
+                      ['Krakatoa volcano explosion', Numeric(answer=1883)],
+                      ["Proof of Fermat's last theorem", Numeric(answer=1994)],
+                    ]
+                  </activetable>
+                </vertical_demo>
+             """),
+        ]
