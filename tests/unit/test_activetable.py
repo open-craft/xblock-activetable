@@ -24,17 +24,21 @@ class ActiveTableTest(unittest.TestCase):
 
     def test_validate_field_data(self):
         data = mock.Mock()
-        data.table_definition = 'invalid'
+        data.content = 'invalid'
         data.column_widths = ''
         data.row_heights = ''
         self.verify_validation(data, False)
-        data.table_definition = '[["header"], [6.283]]'
+        data.content = '[["header"], [6.283]]'
         self.verify_validation(data, True)
         data.column_widths = 'invalid'        
         self.verify_validation(data, False)
-        data.column_widths = '[1, 2, 3]'
+        data.column_widths = '[1, 2]'
+        self.verify_validation(data, False)
+        data.column_widths = '[1]'
         self.verify_validation(data, True)
         data.row_heights = 'invalid'        
         self.verify_validation(data, False)
         data.row_heights = '[1, 2, 3]'
+        self.verify_validation(data, False)
+        data.row_heights = '[1, 2]'
         self.verify_validation(data, True)
