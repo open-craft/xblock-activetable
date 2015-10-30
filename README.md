@@ -20,9 +20,9 @@ Run pylint:
 
     pylint activetable
 
-Run the unit tests:
+Run the unit and integration tests:
 
-    nosetests --with-coverage --cover-package=activetable tests/unit
+    ./run-tests.sh --with-coverage --cover-package=activetable
 
 
 The table definition
