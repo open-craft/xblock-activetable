@@ -33,7 +33,7 @@ function ActiveTableXBlock(runtime, element, init_args) {
         else if (data.num_total_answers == data.num_correct_answers) {
             $status.removeClass('incorrect').addClass('correct');
             $status.text('correct');
-            $status_message.text('Great job! ');
+            $status_message.text('Great job!');
         } else {
             $status.removeClass('correct').addClass('incorrect');
             $status.text('incorrect');

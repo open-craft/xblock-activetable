@@ -153,7 +153,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             else:
                 row['class'] = 'odd'
             for cell in row['cells']:
-                cell.id = 'cell_{}_{}'.format(cell.index, row['index'])
+                cell.id = 'cell_{}_{}'.format(row['index'], cell.index)
+                cell.classes = ''
                 if not cell.is_static:
                     self.response_cells[cell.id] = cell
                     cell.classes = 'active'
