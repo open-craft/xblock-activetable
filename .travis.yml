@@ -6,6 +6,8 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r test-requirements.txt
+  - pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/base.txt
+  - pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/test.txt
   - pip install -r $VIRTUAL_ENV/src/xblock/requirements.txt
 script:
   - pep8 --max-line-length=100 activetable

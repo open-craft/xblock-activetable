@@ -1,8 +1,6 @@
 -r requirements.txt
 
-bok_choy==0.3.3
-coverage
+-e git+https://github.com/edx/xblock-sdk.git@629650ed6fc1b77d1a5287debeace0b29db7c0fd#egg=xblock-sdk
+
 ddt
-pep8
-pylint==1.3.1   # Same version as XBlock requires to avoid conflicting requirements
 selenium==2.48.0
