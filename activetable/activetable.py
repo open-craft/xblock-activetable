@@ -153,7 +153,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
                 row['class'] = 'even'
             else:
                 row['class'] = 'odd'
-            for cell in row['cells']:
+            for cell, cell.col_label in zip(row['cells'], self.thead):
                 cell.id = 'cell_{}_{}'.format(row['index'], cell.index)
                 cell.classes = ''
                 if not cell.is_static:

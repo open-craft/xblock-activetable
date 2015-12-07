@@ -1,7 +1,8 @@
 <div class="activetable_block">
   {% if help_text %}
   <div class="activetable-help" style="width: {{ total_width }}px;">
-    <button id="activetable-help-button">+help</button>
+    <button id="activetable-help-button" aria-controls="activetable-help-text" aria-haspopup="true"
+            aria-expanded="false">+help</button>
     <p id="activetable-help-text">{{ help_text }}</p>
   </div>
   {% endif %}
@@ -12,7 +13,7 @@
     </colgroup>
     <thead>
       <tr style="height: {{ head_height }}px;">
-        {% for cell in thead %}<th>{{ cell }}</th>{% endfor %}
+        {% for cell in thead %}<th scope="col">{{ cell }}</th>{% endfor %}
       </tr>
     </thead>
     <tbody>
@@ -23,7 +24,8 @@
           {% if cell.is_static %}
           {{ cell.value }}
           {% else %}
-          <input type="text" style="height: {{ cell.height }}px;" size=1
+          <label class="sr" for="input_{{ cell.id }}">{{ cell.col_label }}</label>
+          <input id="input_{{ cell.id }}" type="text" style="height: {{ cell.height }}px;" size=1
                  value="{{ cell.value|default_if_none:'' }}" placeholder="{{ cell.placeholder }}">
           {% endif %}
         </td>
@@ -35,13 +37,13 @@
   {% else %}
   <p>This component isn't configured properly and can't be displayed.</p>
   {% endif %}
-  <p class="status"></p>
-  <div class="status-message"></div>
+  <p class="status" aria-live="polite"></p>
+  <div class="status-message" aria-live="polite"></div>
   <div class="action">
     <button class="check"><span class="check-label">Check</span><span class="sr"> your answer</span></button>
     {% if max_attempts %}
     <button class="save">Save<span class="sr"> your answer</span></button>
-    <div class="submission-feedback"></div>
+    <div class="submission-feedback" aria-live="polite"></div>
     {% endif %}
   </div>
 </div>

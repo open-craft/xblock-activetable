@@ -84,9 +84,11 @@ function ActiveTableXBlock(runtime, element, init_args) {
     }
 
     function toggleHelp(e) {
-        var $help_text = $('#activetable-help-text', element);
+        var $help_text = $('#activetable-help-text', element), visible;
         $help_text.toggle();
-        $(this).text($help_text.is(':visible') ? '-help' : '+help');
+        visible = $help_text.is(':visible');
+        $(this).text(visible ? '-help' : '+help');
+        $(this).attr('aria-expanded', visible);
     }
 
     $('#activetable-help-button', element).click(toggleHelp);
