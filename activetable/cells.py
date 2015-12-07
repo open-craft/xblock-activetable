@@ -13,6 +13,8 @@ import decimal
 class Cell(object):
     """Abstract base class for all cells."""
 
+    is_static = False
+
     def __eq__(self, other):
         """Test for equality based on type and attribute values."""
         return type(self) is type(other) and vars(self) == vars(other)
@@ -30,7 +32,6 @@ class StaticCell(Cell):
 class NumericCell(Cell):
     """A numeric response cell."""
 
-    is_static = False
     placeholder = 'numeric response'
 
     def __init__(self, answer, tolerance=None,
@@ -65,7 +66,6 @@ class NumericCell(Cell):
 class StringCell(Cell):
     """A string response cell."""
 
-    is_static = False
     placeholder = 'text response'
 
     def __init__(self, answer):
@@ -74,4 +74,4 @@ class StringCell(Cell):
 
     def check_response(self, student_response):
         """Return a Boolean value indicating whether the student response is correct."""
-        return student_response == self.answer
+        return student_response.strip() == self.answer.strip()

@@ -32,4 +32,7 @@ class CellTest(unittest.TestCase):
     def test_string_cell(self):
         cell = StringCell('OpenCraft')
         self.assertTrue(cell.check_response('OpenCraft'))
+        self.assertTrue(cell.check_response(' OpenCraft \t\r\n'))
         self.assertFalse(cell.check_response('giraffe'))
+        cell = StringCell('ÖpenCräft')
+        self.assertTrue(cell.check_response('ÖpenCräft'))

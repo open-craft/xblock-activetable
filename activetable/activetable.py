@@ -28,7 +28,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
     )
     content = String(
         display_name='Table definition',
-        help='The definition of the table in Python-like syntax.',
+        help='The definition of the table in Python-like syntax.  Note that changing the table '
+        'definition of a live problem will invalidate all student answers.',
         scope=Scope.content,
         multiline_editor=True,
         resettable_editor=False,
@@ -53,8 +54,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
     column_widths = String(
         display_name='Column widths',
         help='Set the width of the columns in pixels.  The value should be a Python-like list of '
-        'numerical values.  The total width of the table should not be more than 800. No value '
-        'will result in equal-width columns with a total width of 800 pixels.',
+        'numerical values.  The total width of the table should not be more than 800. Omitting '
+        'this value will result in equal-width columns with a total width of 800 pixels.',
         scope=Scope.content,
         resettable_editor=False,
     )
@@ -68,7 +69,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
     )
     default_tolerance = Float(
         display_name='Default tolerance',
-        help='The tolerance in pecent that is used for numerical response cells you did not '
+        help='The tolerance in percent that is used for numerical response cells you did not '
         'specify an explicit tolerance for.',
         scope=Scope.content,
         default=1.0,
@@ -148,7 +149,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         self.response_cells = {}
         for row, height in zip(self.tbody, self._row_heights[1:]):
             row['height'] = height
-            if row['index'] & 1:
+            if row['index'] % 2:
                 row['class'] = 'even'
             else:
                 row['class'] = 'odd'

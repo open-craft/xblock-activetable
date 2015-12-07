@@ -81,7 +81,7 @@ def _parse_response_cell(cell_node):
         raise ParseError('invalid cell input type: {}'.format(cell_type))
     try:
         return cell_class(**kwargs)
-    except TypeError as exc:
+    except Exception as exc:
         raise ParseError(exc.message)
 
 
