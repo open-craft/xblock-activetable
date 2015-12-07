@@ -43,7 +43,7 @@ tolerance specified above.  The restrictions for the number of significant digit
 well.  Significant digits are counted started from the first non-zero digit specified by the
 student, and include trailing zeros.
 
-    String(answer='<correct answer>')
+    Text(answer='<correct answer>')
 
 A cell that expects a string answer.
 

@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, unicode_literals
 import ddt
 import unittest
 
-from activetable.cells import Cell, NumericCell, StaticCell, StringCell
+from activetable.cells import Cell, NumericCell, StaticCell, TextCell
 from activetable.parsers import ParseError, parse_table, parse_number_list
 
 @ddt.ddt
@@ -15,12 +15,12 @@ class ParserTest(unittest.TestCase):
         [
             ['Event', 'Year'],
             ['French Revolution', Numeric(answer=1789)],
-            ['Volcano exploded in 1883', String(answer='Krakatoa')],
+            ['Volcano exploded in 1883', Text(answer='Krakatoa')],
             [6.283, 123],
         ]
         """
         thead, tbody = parse_table(table_definition)
-        expected = eval(table_definition.strip(), dict(Numeric=NumericCell, String=StringCell))
+        expected = eval(table_definition.strip(), dict(Numeric=NumericCell, Text=TextCell))
         expected_body = []
         for i, row in enumerate(expected[1:], 1):
             cells = []

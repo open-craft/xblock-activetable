@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 import ast
 import numbers
 
-from .cells import NumericCell, StaticCell, StringCell
+from .cells import NumericCell, StaticCell, TextCell
 
 
 class ParseError(Exception):
@@ -63,7 +63,7 @@ def parse_table(table_definition):
 def _parse_response_cell(cell_node):
     """Parse a single student response cell definition.
 
-    Response cells are written in function call syntax, either String(...) or Numeric(...).  All
+    Response cells are written in function call syntax, either Text(...) or Numeric(...).  All
     arguments must be keyword arguments.
     """
     cell_type = _ensure_type(cell_node.func, ast.Name).id
@@ -71,8 +71,8 @@ def _parse_response_cell(cell_node):
         raise ParseError(
             'all arguments to {} must be keyword arguments of the form name=value'.format(cell_type)
         )
-    if cell_type == 'String':
-        cell_class = StringCell
+    if cell_type == 'Text':
+        cell_class = TextCell
         kwargs = {kw.arg: _ensure_type(kw.value, ast.Str).s for kw in cell_node.keywords}
     elif cell_type == 'Numeric':
         cell_class = NumericCell

@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import unittest
 
-from activetable.cells import NumericCell, StringCell
+from activetable.cells import NumericCell, TextCell
 
 class CellTest(unittest.TestCase):
 
@@ -30,9 +30,9 @@ class CellTest(unittest.TestCase):
         self.assertFalse(cell.check_response('6.2382'))
 
     def test_string_cell(self):
-        cell = StringCell('OpenCraft')
+        cell = TextCell('OpenCraft')
         self.assertTrue(cell.check_response('OpenCraft'))
         self.assertTrue(cell.check_response(' OpenCraft \t\r\n'))
         self.assertFalse(cell.check_response('giraffe'))
-        cell = StringCell('ÖpenCräft')
+        cell = TextCell('ÖpenCräft')
         self.assertTrue(cell.check_response('ÖpenCräft'))

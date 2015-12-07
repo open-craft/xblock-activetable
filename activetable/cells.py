@@ -63,7 +63,7 @@ class NumericCell(Cell):
         return abs(value - self.answer) <= self.abs_tolerance
 
 
-class StringCell(Cell):
+class TextCell(Cell):
     """A string response cell."""
 
     placeholder = 'text response'

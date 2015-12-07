@@ -36,7 +36,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         default=textwrap.dedent("""\
         [
             ['Column header 1', 'Column header 2'],
-            ['Enter "answer" here:', String(answer='answer')],
+            ['Enter "answer" here:', Text(answer='answer')],
             [42, Numeric(answer=42, tolerance=0.0)],
         ]
         """)
