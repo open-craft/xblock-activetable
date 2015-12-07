@@ -1,5 +1,5 @@
-django>=1.4, <1.5
+django>=1.8, <1.9
 pyyaml
--e git+https://github.com/edx/XBlock.git@tag-master-2015-05-22#egg=XBlock
--e git+https://github.com/edx/xblock-utils.git@b4f9b51146c7fafa12f41d54af752b8f1516dffd#egg=xblock-utils
--e .
+git+https://github.com/edx/XBlock.git@xblock-0.4.2#egg=XBlock
+git+https://github.com/edx/xblock-utils.git@v1.0.0#egg=xblock-utils
+.
