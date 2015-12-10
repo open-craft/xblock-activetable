@@ -1,0 +1,49 @@
+<div class="activetable_block">
+  {% if help_text %}
+  <div class="activetable-help" style="width: {{ total_width }}px;">
+    <button id="activetable-help-button" aria-controls="activetable-help-text" aria-haspopup="true"
+            aria-expanded="false">+help</button>
+    <p id="activetable-help-text">{{ help_text }}</p>
+  </div>
+  {% endif %}
+  {% if thead %}
+  <table id="activetable">
+    <colgroup>
+      {% for width in column_widths %}<col style="width: {{ width }}px;">{% endfor %}
+    </colgroup>
+    <thead>
+      <tr style="height: {{ head_height }}px;">
+        {% for cell in thead %}<th scope="col">{{ cell }}</th>{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in tbody %}
+      <tr class="{{ row.class }}" style="height: {{ row.height }}px;">
+        {% for cell in row.cells %}
+        <td class="{{ cell.classes }}" id="{{ cell.id }}">
+          {% if cell.is_static %}
+          {{ cell.value }}
+          {% else %}
+          <label class="sr" for="input_{{ cell.id }}">{{ cell.col_label }}</label>
+          <input id="input_{{ cell.id }}" type="text" style="height: {{ cell.height }}px;" size=1
+                 value="{{ cell.value|default_if_none:'' }}" placeholder="{{ cell.placeholder }}">
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>This component isn't configured properly and can't be displayed.</p>
+  {% endif %}
+  <p class="status" aria-live="polite"></p>
+  <div class="status-message" aria-live="polite"></div>
+  <div class="action">
+    <button class="check"><span class="check-label">Check</span><span class="sr"> your answer</span></button>
+    {% if max_attempts %}
+    <button class="save">Save<span class="sr"> your answer</span></button>
+    <div class="submission-feedback" aria-live="polite"></div>
+    {% endif %}
+  </div>
+</div>

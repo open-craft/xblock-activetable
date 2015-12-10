@@ -1,0 +1,5 @@
+django>=1.8, <1.9
+pyyaml
+git+https://github.com/edx/XBlock.git@xblock-0.4.2#egg=XBlock
+git+https://github.com/edx/xblock-utils.git@v1.0.0#egg=xblock-utils
+.

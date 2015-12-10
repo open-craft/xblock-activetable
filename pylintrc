@@ -1,0 +1,19 @@
+[REPORTS]
+reports=no
+
+[FORMAT]
+max-line-length=100
+
+[MESSAGES CONTROL]
+disable=
+    I,
+    attribute-defined-outside-init,
+    maybe-no-member,
+    star-args,
+    too-few-public-methods,
+    too-many-ancestors,
+    too-many-instance-attributes,
+    too-many-public-methods
+
+[VARIABLES]
+dummy-variables-rgx=_$|dummy|unused
