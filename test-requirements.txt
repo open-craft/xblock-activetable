@@ -1,6 +1,0 @@
--r requirements.txt
-
--e git+https://github.com/edx/xblock-sdk.git@4e8e713e7dd886b8d2eb66b5001216b66b9af81a#egg=xblock-sdk
-
-ddt
-selenium==2.48.0

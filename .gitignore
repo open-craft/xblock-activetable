@@ -1,7 +1,0 @@
-__pycache__/
-*.py[cod]
-activetable_xblock.egg-info/**
-.coverage
-tests.integration.*.log
-tests.integration.*.png
-var/
