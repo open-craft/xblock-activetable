@@ -74,14 +74,14 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.content,
         default=1.0,
     )
-    max_score = Float(
+    maximum_score = Float(
         display_name='Maximum score',
         help='The number of points students will be awarded when solving all fields correctly.  '
         'For partially correct attempts, the score will be pro-rated.',
         scope=Scope.settings,
         default=1.0,
     )
-    max_attempts = Integer(
+    maximum_attempts = Integer(
         display_name='Maximum attempts',
         help='Defines the number of times a student can try to answer this problem.  If the value '
         'is not set, infinite attempts are allowed.',
@@ -95,8 +95,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'column_widths',
         'row_heights',
         'default_tolerance',
-        'max_score',
-        'max_attempts',
+        'maximum_score',
+        'maximum_attempts',
     ]
 
     # Dictionary mapping cell ids to the student answers.
@@ -171,9 +171,9 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             num_correct_answers=self.num_correct_answers,
             num_total_answers=self.num_total_answers,
             score=self.score,
-            max_score=self.max_score,
+            maximum_score=self.maximum_score,
             attempts=self.attempts,
-            max_attempts=self.max_attempts,
+            maximum_attempts=self.maximum_attempts,
         )
 
     def student_view(self, context=None):
@@ -188,7 +188,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             head_height=self._row_heights[0] if self._row_heights else None,
             thead=self.thead,
             tbody=self.tbody,
-            max_attempts=self.max_attempts,
+            maximum_attempts=self.maximum_attempts,
         )
         html = loader.render_template('templates/html/activetable.html', context)
 
@@ -207,7 +207,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     def check_and_save_answers(self, data):
         """Common implementation for the check and save handlers."""
-        if self.max_attempts and self.attempts >= self.max_attempts:
+        if self.maximum_attempts and self.attempts >= self.maximum_attempts:
             # The "Check" button is hidden when the maximum number of attempts has been reached, so
             # we can only get here by manually crafted requests.  We simply return the current
             # status without rechecking or storing the answers in that case.
@@ -231,8 +231,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         """
         self.answers_correct = self.check_and_save_answers(data)
         self.attempts += 1
-        self.score = self.num_correct_answers * self.max_score / len(self.answers_correct)
-        self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.max_score))
+        self.score = self.num_correct_answers * self.maximum_score / len(self.answers_correct)
+        self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.maximum_score))
         return self.get_status()
 
     @XBlock.json_handler

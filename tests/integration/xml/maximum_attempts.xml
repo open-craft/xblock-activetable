@@ -1,5 +1,5 @@
 <vertical_demo>
-  <activetable url_name="max_attempts" max_attempts="2">
+  <activetable url_name="maximum_attempts" maximum_attempts="2">
     [
       ['Event', 'Year'],
       ['French Revolution', Numeric(answer=1789)],

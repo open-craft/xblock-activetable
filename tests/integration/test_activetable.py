@@ -81,7 +81,7 @@ class TestActiveTable(StudioEditableBaseTest):
 
     def test_save_and_reload(self):
         answers = dict(cell_1_1='1', cell_2_1='2', cell_3_1='3')
-        self.load_scenario('xml/max_attempts.xml')
+        self.load_scenario('xml/maximum_attempts.xml')
         self.enter_answers(answers)
         self.element.find_element_by_css_selector('.action button.save').click()
         vertical = self.load_root_xblock()
