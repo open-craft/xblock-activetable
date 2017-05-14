@@ -81,7 +81,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.settings,
         default=1.0,
     )
-    maximum_attempts = Integer(
+    max_attempts = Integer(
         display_name='Maximum attempts',
         help='Defines the number of times a student can try to answer this problem.  If the value '
         'is not set, infinite attempts are allowed.',
@@ -96,7 +96,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'row_heights',
         'default_tolerance',
         'maximum_score',
-        'maximum_attempts',
+        'max_attempts',
     ]
 
     # Dictionary mapping cell ids to the student answers.
@@ -173,7 +173,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             score=self.score,
             maximum_score=self.maximum_score,
             attempts=self.attempts,
-            maximum_attempts=self.maximum_attempts,
+            max_attempts=self.max_attempts,
         )
 
     def student_view(self, context=None):
@@ -188,7 +188,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             head_height=self._row_heights[0] if self._row_heights else None,
             thead=self.thead,
             tbody=self.tbody,
-            maximum_attempts=self.maximum_attempts,
+            max_attempts=self.max_attempts,
         )
         html = loader.render_template('templates/html/activetable.html', context)
 
@@ -207,7 +207,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
 
     def check_and_save_answers(self, data):
         """Common implementation for the check and save handlers."""
-        if self.maximum_attempts and self.attempts >= self.maximum_attempts:
+        if self.max_attempts and self.attempts >= self.max_attempts:
             # The "Check" button is hidden when the maximum number of attempts has been reached, so
             # we can only get here by manually crafted requests.  We simply return the current
             # status without rechecking or storing the answers in that case.

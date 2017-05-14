@@ -51,13 +51,13 @@ function ActiveTableXBlock(runtime, element, init_args) {
         } else {
             feedback_msg = '(' + data.score + '/' + data.maximum_score + ' points)';
         }
-        if (data.maximum_attempts) {
-            feedback_msg = 'You have used ' + data.attempts + ' of ' + data.maximum_attempts +
+        if (data.max_attempts) {
+            feedback_msg = 'You have used ' + data.attempts + ' of ' + data.max_attempts +
                 ' submissions ' + feedback_msg;
-            if (data.attempts == data.maximum_attempts - 1) {
+            if (data.attempts == data.max_attempts - 1) {
                 $('.action .check .check-label', element).text('Final check');
             }
-            else if (data.attempts >= data.maximum_attempts) {
+            else if (data.attempts >= data.max_attempts) {
                 $('.action .check, .action .save', element).hide();
             }
         }
