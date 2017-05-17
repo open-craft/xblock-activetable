@@ -74,7 +74,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.content,
         default=1.0,
     )
-    max_score = Float(
+    maximum_score = Float(
         display_name='Maximum score',
         help='The number of points students will be awarded when solving all fields correctly.  '
         'For partially correct attempts, the score will be pro-rated.',
@@ -95,7 +95,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'column_widths',
         'row_heights',
         'default_tolerance',
-        'max_score',
+        'maximum_score',
         'max_attempts',
     ]
 
@@ -171,7 +171,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             num_correct_answers=self.num_correct_answers,
             num_total_answers=self.num_total_answers,
             score=self.score,
-            max_score=self.max_score,
+            maximum_score=self.maximum_score,
             attempts=self.attempts,
             max_attempts=self.max_attempts,
         )
@@ -231,8 +231,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         """
         self.answers_correct = self.check_and_save_answers(data)
         self.attempts += 1
-        self.score = self.num_correct_answers * self.max_score / len(self.answers_correct)
-        self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.max_score))
+        self.score = self.num_correct_answers * self.maximum_score / len(self.answers_correct)
+        self.runtime.publish(self, 'grade', dict(value=self.score, max_value=self.maximum_score))
         return self.get_status()
 
     @XBlock.json_handler
