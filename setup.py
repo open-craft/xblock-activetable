@@ -1,5 +1,7 @@
 """Setup for activetable XBlock."""
 
+from __future__ import absolute_import
+
 import os
 from setuptools import setup
 
@@ -22,8 +24,13 @@ def package_data(pkg, roots):
 
 setup(
     name='activetable-xblock',
-    version='0.1',
+    version='0.2',
     description='activetable XBlock',   # TODO: write a better description.
+    url='https://github.com/open-craft/xblock-activetable',
+    classifiers=[
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3'
+    ],
     packages=[
         'activetable',
     ],

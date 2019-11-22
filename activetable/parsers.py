@@ -11,6 +11,10 @@ from .cells import NumericCell, StaticCell, TextCell
 class ParseError(Exception):
     """The table definition could not be parsed."""
 
+    def __init__(self, message):
+        self.message = message
+        super(ParseError, self).__init__(message)
+
 
 def _ensure_type(node, expected_type):
     """Internal helper function for parse_table."""
@@ -28,8 +32,8 @@ def parse_table(table_definition):
     """
     try:
         expr = ast.parse(table_definition.strip(), mode='eval')
-    except SyntaxError as exc:
-        raise ParseError(exc.msg)
+    except SyntaxError:
+        raise ParseError('Could not parse table definition.')
 
     row_iter = iter(_ensure_type(expr.body, ast.List).elts)
     thead = []
@@ -67,10 +71,27 @@ def _parse_response_cell(cell_node):
     arguments must be keyword arguments.
     """
     cell_type = _ensure_type(cell_node.func, ast.Name).id
-    if any((cell_node.args, cell_node.starargs, cell_node.kwargs)):
-        raise ParseError(
-            'all arguments to {} must be keyword arguments of the form name=value'.format(cell_type)
+
+    # Reject forbidden argument types
+    if hasattr(cell_node, 'starargs') and hasattr(cell_node, 'kwargs'):  # Python 2
+        forbidden_argument_types = (cell_node.args, cell_node.starargs, cell_node.kwargs)
+        kwargs_nodes = tuple()
+    else:  # Python 3.5 or newer
+        # starargs and kwargs are no longer treated as separate argument types for ast.Call.
+        # From https://greentreesnakes.readthedocs.io/en/latest/nodes.html#Call:
+        # "Instead of starargs, Starred nodes can now appear in args,
+        # and kwargs is replaced by keyword nodes in keywords for which arg is None."
+        forbidden_argument_types = (cell_node.args, )
+        kwargs_nodes = tuple(
+            keyword_node for keyword_node in cell_node.keywords if keyword_node.arg is None
         )
+    if any(forbidden_argument_types) or any(kwargs_nodes):
+        raise ParseError(
+            'All arguments to {} must be keyword arguments of the form name=value'.format(
+                cell_type
+            )
+        )
+
     if cell_type == 'Text':
         cell_class = TextCell
         kwargs = {kw.arg: _ensure_type(kw.value, ast.Str).s for kw in cell_node.keywords}
@@ -81,8 +102,8 @@ def _parse_response_cell(cell_node):
         raise ParseError('invalid cell input type: {}'.format(cell_type))
     try:
         return cell_class(**kwargs)
-    except Exception as exc:
-        raise ParseError(exc.message)
+    except Exception:
+        raise ParseError('Could not parse cell definition.')
 
 
 def parse_number_list(source):
@@ -93,7 +114,7 @@ def parse_number_list(source):
     try:
         lst = ast.literal_eval(source)
     except (SyntaxError, ValueError) as exc:
-        msg = getattr(exc, 'msg', getattr(exc, 'message', None))
+        msg = getattr(exc, 'msg', getattr(exc, 'message', 'Could not parse list of numbers.'))
         raise ParseError(msg)
     if not isinstance(lst, list):
         raise ParseError('not a list')

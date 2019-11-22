@@ -17,7 +17,7 @@ class Cell(object):
 
     def __eq__(self, other):
         """Test for equality based on type and attribute values."""
-        return type(self) is type(other) and vars(self) == vars(other)
+        return isinstance(self, type(other)) and vars(self) == vars(other)
 
 
 class StaticCell(Cell):

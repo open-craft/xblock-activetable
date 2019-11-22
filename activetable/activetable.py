@@ -4,6 +4,9 @@ from __future__ import absolute_import, division, unicode_literals
 
 import textwrap
 
+import six
+from six.moves import zip  # pylint: disable=import-error,redefined-builtin
+
 from xblock.core import XBlock
 from xblock.fields import Dict, Float, Integer, Scope, String
 from xblock.fragment import Fragment
@@ -116,7 +119,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         """The number of correct answers during the last check."""
         if self.answers_correct is None:
             return None
-        return sum(self.answers_correct.itervalues())
+        return sum(six.itervalues(self.answers_correct))
 
     @property
     def num_total_answers(self):
@@ -216,7 +219,7 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         self.postprocess_table()
         answers_correct = {
             cell_id: self.response_cells[cell_id].check_response(value)
-            for cell_id, value in data.iteritems()
+            for cell_id, value in six.iteritems(data)
         }
         # Since the previous statement executed without error, the data is well-formed enough to be
         # stored.  We now know it's a dictionary and all the keys are valid cell ids.

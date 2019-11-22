@@ -10,11 +10,19 @@ Running the tests
 
 Install the test prerequisites:
 
-    pip install -r test-requirements
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r test-requirements.txt
+pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/base.txt
+pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/test.txt
+pip install -r $VIRTUAL_ENV/src/xblock/requirements/base.txt
+pip install -r $VIRTUAL_ENV/src/xblock/requirements/test.txt
+```
 
-Run pep8:
+Run pycodestyle:
 
-    pep8 --max-line-length=100 activetable
+    pycodestyle --max-line-length=100 activetable
 
 Run pylint:
 
@@ -22,7 +30,14 @@ Run pylint:
 
 Run the unit and integration tests:
 
-    ./run-tests.sh --with-coverage --cover-package=activetable
+    coverage run ./run_tests.py
+
+
+## Installation
+
+1. Install this module in the python environment for studio and lms.
+2. Add `"activetable"` to the Advanced Module List array in Advanced
+   Settings in Studio for each course this should be installed in.
 
 
 The table definition

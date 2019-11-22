@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 
+import six
+from six.moves import zip
+
 from selenium.webdriver.support.ui import WebDriverWait
 from xblockutils.resources import ResourceLoader
 from xblockutils.studio_editable_test import StudioEditableBaseTest
@@ -16,7 +19,7 @@ class TestActiveTable(StudioEditableBaseTest):
         self.element = self.go_to_view("student_view")
 
     def enter_answers(self, answers):
-        for cell_id, value in answers.iteritems():
+        for cell_id, value in six.iteritems(answers):
             text_input = self.element.find_element_by_css_selector('#{id} input'.format(id=cell_id))
             text_input.clear()
             text_input.send_keys(value)
@@ -60,7 +63,7 @@ class TestActiveTable(StudioEditableBaseTest):
     def test_basic_answering(self):
 
         def cell_dict(*values):
-            return dict(zip(['cell_1_1', 'cell_2_1', 'cell_3_1'], values))
+            return dict(list(zip(['cell_1_1', 'cell_2_1', 'cell_3_1'], values)))
 
         self.load_scenario('xml/basic.xml')
         self.answer_and_check(
