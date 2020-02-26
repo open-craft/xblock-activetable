@@ -193,14 +193,14 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             tbody=self.tbody,
             max_attempts=self.max_attempts,
         )
-        html = loader.render_template('templates/html/activetable.html', context)
+        html = loader.render_django_template('templates/html/activetable.html', context)
 
         css_context = dict(
             correct_icon=self.runtime.local_resource_url(self, 'public/img/correct-icon.png'),
             incorrect_icon=self.runtime.local_resource_url(self, 'public/img/incorrect-icon.png'),
             unanswered_icon=self.runtime.local_resource_url(self, 'public/img/unanswered-icon.png'),
         )
-        css = loader.render_template('templates/css/activetable.css', css_context)
+        css = loader.render_django_template('templates/css/activetable.css', css_context)
 
         frag = Fragment(html)
         frag.add_css(css)
