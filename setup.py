@@ -24,7 +24,7 @@ def package_data(pkg, roots):
 
 setup(
     name='activetable-xblock',
-    version='0.2.1',
+    version='0.2.2',
     description='activetable XBlock',   # TODO: write a better description.
     url='https://github.com/open-craft/xblock-activetable',
     license = 'AGPLv3',
