@@ -1,6 +1,8 @@
 ActiveTable XBlock
 ==================
 
+![Travis CI](https://travis-ci.org/open-craft/xblock-activetable.svg?branch=master)
+
 This XBlock provides a tabular problem type, where students have to fill in some of the cells of a
 table.
 
