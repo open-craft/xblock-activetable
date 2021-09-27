@@ -1,7 +1,10 @@
 __pycache__/
 *.py[cod]
-activetable_xblock.egg-info/**
-.coverage
 tests.integration.*.log
 tests.integration.*.png
+vectordraw_xblock.egg-info/
 var/
+.tox
+.coverage
+geckodriver.log
+activetable_xblock.egg-info/

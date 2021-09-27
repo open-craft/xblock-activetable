@@ -1,8 +1,8 @@
 -r requirements.txt
 
--e git+https://github.com/edx/xblock-sdk.git@v0.1.6#egg=xblock-sdk
+-e git+https://github.com/edx/xblock-sdk.git#egg=xblock-sdk
 
 ddt
 pycodestyle
-pylint==1.9.5
+pylint
 selenium==3.4.1
