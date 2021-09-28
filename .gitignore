@@ -2,7 +2,6 @@ __pycache__/
 *.py[cod]
 tests.integration.*.log
 tests.integration.*.png
-vectordraw_xblock.egg-info/
 var/
 .tox
 .coverage
