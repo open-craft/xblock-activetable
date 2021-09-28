@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, unicode_literals
 import decimal
 
 
-class Cell(object):
+class Cell:
     """Abstract base class for all cells."""
 
     is_static = False
