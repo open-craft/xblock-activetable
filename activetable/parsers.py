@@ -13,7 +13,7 @@ class ParseError(Exception):
 
     def __init__(self, message):
         self.message = message
-        super(ParseError, self).__init__(message)
+        super().__init__(message)
 
 
 def _ensure_type(node, expected_type):
@@ -32,8 +32,8 @@ def parse_table(table_definition):
     """
     try:
         expr = ast.parse(table_definition.strip(), mode='eval')
-    except SyntaxError:
-        raise ParseError('Could not parse table definition.')
+    except SyntaxError as exc:
+        raise ParseError('Could not parse table definition.') from exc
 
     row_iter = iter(_ensure_type(expr.body, ast.List).elts)
     thead = []
@@ -51,14 +51,14 @@ def parse_table(table_definition):
                 cell = _parse_response_cell(cell_node)
             else:
                 raise ParseError(
-                    'invalid node in row {}, cell {}: {}'.format(i, j, type(cell_node).__name__)
+                    f"invalid node in row {i}, cell {j}: {type(cell_node).__name__}"
                 )
             cell.index = j
             cells.append(cell)
         if len(cells) != len(thead):
             raise ParseError(
-                'row {} has a different number of columns than the previous rows ({} vs. {})'
-                .format(i, len(cells), len(thead))
+                f"row {i} has a different number of columns "
+                f"than the previous rows ({len(cells)} vs. {len(thead)})"
             )
         tbody.append(dict(index=i, cells=cells))
     return thead, tbody
@@ -87,9 +87,7 @@ def _parse_response_cell(cell_node):
         )
     if any(forbidden_argument_types) or any(kwargs_nodes):
         raise ParseError(
-            'All arguments to {} must be keyword arguments of the form name=value'.format(
-                cell_type
-            )
+            f"All arguments to {cell_type} must be keyword arguments of the form name=value"
         )
 
     if cell_type == 'Text':
@@ -99,11 +97,11 @@ def _parse_response_cell(cell_node):
         cell_class = NumericCell
         kwargs = {kw.arg: _ensure_type(kw.value, ast.Num).n for kw in cell_node.keywords}
     else:
-        raise ParseError('invalid cell input type: {}'.format(cell_type))
+        raise ParseError(f"invalid cell input type: {cell_type}")
     try:
         return cell_class(**kwargs)
-    except Exception:
-        raise ParseError('Could not parse cell definition.')
+    except Exception as exc:
+        raise ParseError('Could not parse cell definition.') from exc
 
 
 def parse_number_list(source):
@@ -115,7 +113,7 @@ def parse_number_list(source):
         lst = ast.literal_eval(source)
     except (SyntaxError, ValueError) as exc:
         msg = getattr(exc, 'msg', getattr(exc, 'message', 'Could not parse list of numbers.'))
-        raise ParseError(msg)
+        raise ParseError(msg) from exc
     if not isinstance(lst, list):
         raise ParseError('not a list')
     if not all(isinstance(x, numbers.Real) for x in lst):

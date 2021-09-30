@@ -72,3 +72,7 @@ An example of a table definition:
         ['Krakatoa volcano explosion', Numeric(answer=1883)],
         ["Proof of Fermat's last theorem", Numeric(answer=1994)],
     ]
+
+## Testing
+
+For running the tests, run the command `tox`
